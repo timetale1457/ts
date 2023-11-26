@@ -1,107 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
+import CreateRoom from './component/CreateRoom';
+import ChatRoom from './component/ChatRoom';
 
-const App = () => {
+const App: React.FC = () => {
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
-  const [inputRoomId, setInputRoomId] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [message, setMessage] = useState('');
-  const [chat, setChat] = useState<string[]>([]);
-  const [error, setError] = useState('');
+  const [nickname, setNickname] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    socket = io('http://localhost:4000');
+    const newSocket = io('http://localhost:4000');
 
-    socket.on('roomCreated', (roomId: string) => {
-      setRoomId(roomId);
+    newSocket.on('connect', () => {
+      console.log('Connected to the server');
     });
 
-    socket.on('userJoined', (nickname: string) => {
-      setChat((prevChat) => [...prevChat, `${nickname} has joined`]);
-    });
-
-    socket.on('newMessage', (message: string) => {
-      setChat((prevChat) => [...prevChat, message]);
-    });
-
-    socket.on('roomFull', () => {
+    newSocket.on('roomFull', () => {
       setError('The room is full.');
     });
-
-    socket.on('roomNotExist', () => {
+    
+    newSocket.on('roomNotExist', () => {
       setError('The room does not exist.');
     });
 
+    setSocket(newSocket);
+
     return () => {
-      socket.disconnect();
+      newSocket.disconnect();
     };
   }, []);
 
-  const createRoom = () => {
-    if (nickname) {
-      socket.emit('createRoom', { maxPeople: 10, roomName: 'My Room', nickname });
-    }
-  };
-
-  const joinRoomById = () => {
-    setRoomId(inputRoomId);
-    joinRoom();
-  };
-
-  const joinRoom = () => {
-    if (roomId && nickname) {
-      socket.emit('joinRoom', roomId, nickname);
-    }
-  };
-
-  const sendMessage = () => {
-    if (roomId && message) {
-      const fullMessage = `${nickname}: ${message}`;
-      socket.emit('sendMessage', roomId, fullMessage);
-      setMessage('');
-    }
-  };
+  if (!socket) return <div>Loading...</div>;
 
   return (
     <div>
       {error && <div>Error: {error}</div>}
       {!roomId ? (
-        <>
-          <input
-            type="text"
-            placeholder="Nickname"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-          />
-          <button onClick={createRoom}>Create Room</button>
-          <input
-            type="text"
-            placeholder="Room ID"
-            value={inputRoomId}
-            onChange={(e) => setInputRoomId(e.target.value)}
-          />
-          <button onClick={joinRoomById}>Join Room by ID</button>
-        </>
+        <CreateRoom setRoomId={setRoomId} setNickname={setNickname} socket={socket} />
       ) : (
-        <>
-          <h1>Room ID: {roomId}</h1>
-          <button onClick={joinRoom}>Join Room</button>
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button onClick={sendMessage}>Send</button>
-          <div>
-            {chat.map((msg, index) => (
-              <div key={index}>{msg}</div>
-            ))}
-          </div>
-        </>
+        <ChatRoom roomId={roomId} nickname={nickname} socket={socket} />
       )}
     </div>
   );
 };
 
-let socket: Socket;
 export default App;
