@@ -18,7 +18,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/src/index.ts", //프로그램 시작 경로
+            "program": "${workspaceFolder}/src/app.ts", //프로그램 시작 경로
             "cwd": "${workspaceRoot}",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
