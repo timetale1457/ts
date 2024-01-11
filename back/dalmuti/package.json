@@ -16,10 +16,16 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "http": "^0.0.1-security",
+    "mkdirp": "^3.0.1",
+    "moment": "^2.30.1",
+    "pg": "^8.11.3",
     "socket.io": "^4.7.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
+    "@types/pg": "^8.10.9",
+    "@types/winston": "^2.4.4",
     "ts-node": "^10.9.1"
   }
 }

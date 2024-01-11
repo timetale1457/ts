@@ -1,0 +1,337 @@
+{
+    "dalmuti": {
+        "create_table": [
+            {
+                "name": "seq_uid",
+                "query": [
+                    "create sequence seq_uid",
+                    "increment by 1",
+                    "minvalue 100000",
+                    "maxvalue 3372036854775807",
+                    "start with 100000;"
+                ]
+            },
+            {
+                "name": "tb_code",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_code (",
+                    "code_group    varchar(3)     not null,",
+                    "code          varchar(3)     not null,",
+                    "code_name     varchar(256)   not null,",
+                    "remarks       varchar(256)   null,",
+                    "sort_order     varchar(8)    null,",
+                    "enabled        int4          not null    default 1,",
+                    "deleted        int4          not null    default 0,",
+                    "built_in       int4          not null    default 0,",
+                    "insert_id      varchar(45)   not null,",
+                    "insert_date    timestamp     not null    default current_timestamp,",
+                    "update_id      varchar(45)   not null,",
+                    "update_date    timestamp     not null    default current_timestamp,",
+                    "constraint tb_code_pk primary key (code_group, code)",
+                    ");"
+                ]
+            },
+            {
+                "name": "tb_user_group",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_user_group (",
+                    "user_group_id  int8          not null,",
+                    "name           varchar(256)  not null,",
+                    "remarks        varchar(256)  null,",
+                    "enabled        int4          not null    default 1,",
+                    "deleted        int4          not null    default 0,",
+                    "built_in       int4          not null    default 0,",
+                    "insert_id      varchar(45)   not null,",
+                    "insert_date    timestamp     not null    default current_timestamp,",
+                    "update_id      varchar(45)   not null,",
+                    "update_date    timestamp     not null    default current_timestamp,",
+                    "constraint tb_user_group_pk primary key (user_group_id)",
+                    ");",
+                    "create unique index tb_user_group_udx1 on tb_user_group (name);"
+                ]
+            },
+            {
+                "name": "tb_user",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_user (",
+                    "user_id          int8          not null,",
+                    "name             varchar(256)  not null,",
+                    "cell             varchar(64)   null,",
+                    "email            varchar(64)   null,",
+                    "affiliation      varchar(128)  not null,",
+                    "member_type_code varchar(3)    not null,",
+                    "remarks          varchar(256)  null,",
+                    "enabled          int4          not null    default 1,",
+                    "deleted          int4          not null    default 0,",
+                    "built_in         int4          not null    default 0,",
+                    "insert_id        varchar(45)   not null,",
+                    "insert_date      timestamp     not null    default current_timestamp,",
+                    "update_id        varchar(45)   not null,",
+                    "update_date      timestamp     not null    default current_timestamp,",
+                    "constraint tb_user_pk primary key (user_id)",
+                    ");"
+                ]
+            },
+            {
+                "name": "tb_user_to_user_group",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_user_to_user_group (",
+                    "user_id        int8          not null,",
+                    "user_group_id  int8          not null,",
+                    "insert_id      varchar(45)   not null,",
+                    "insert_date    timestamp     not null    default current_timestamp,",
+                    "update_id      varchar(45)   not null,",
+                    "update_date    timestamp     not null    default current_timestamp,",
+                    "constraint tb_user_to_user_group_pk primary key (user_id, user_group_id)",
+                    ");"
+                ]
+            },
+            {
+                "name": "tb_login_account",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_login_account (",
+                    "user_id          int8          not null,",
+                    "login_id         varchar(45)   not null,",
+                    "password         varchar(256)  not null,",
+                    "login_fail_count int4          not null    default 0,",
+                    "remarks          varchar(256)  null,",
+                    "enabled          int4          not null    default 1,",
+                    "deleted          int4          not null    default 0,",
+                    "built_in         int4          not null    default 0,",
+                    "insert_id        varchar(45)   not null,",
+                    "insert_date      timestamp     not null    default current_timestamp,",
+                    "update_id        varchar(45)   not null,",
+                    "update_date      timestamp     not null    default current_timestamp,",
+                    "constraint tb_login_account_pk primary key (user_id, login_id)",
+                    ");"
+                ]
+            },
+            {
+                "name": "tb_login_history",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_login_history (",
+                    "user_id        int8          not null,",
+                    "login_id       varchar(45)   not null,",
+                    "create_time    varchar(17)   not null,",
+                    "code           varchar(3)    not null,",
+                    "ip             varchar(16)   not null,",
+                    "remarks        varchar(256)  null,",
+                    "enabled        int4          not null    default 1,",
+                    "deleted        int4          not null    default 0,",
+                    "built_in       int4          not null    default 0,",
+                    "insert_id      varchar(45)   not null,",
+                    "insert_date    timestamp     not null    default current_timestamp,",
+                    "update_id      varchar(45)   not null,",
+                    "update_date    timestamp     not null    default current_timestamp,",
+                    "constraint tb_login_history_pk primary key (user_id, login_id, create_time)",
+                    ");"
+                ]
+            },
+            {
+                "name": "tb_login_account_history",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_login_account_history (",
+                    "user_id        int8          not null,",
+                    "login_id       varchar(45)   not null,",
+                    "to_ymdhms      varchar(14)   not null,",
+                    "from_ymdhms    varchar(14)   not null,",
+                    "changed_reason varchar(3)    not null,",
+                    "password       varchar(256)  not null,",
+                    "remarks        varchar(256)  null,",
+                    "enabled        int4          not null    default 1,",
+                    "deleted        int4          not null    default 0,",
+                    "built_in       int4          not null    default 0,",
+                    "insert_id      varchar(45)   not null,",
+                    "insert_date    timestamp     not null    default current_timestamp,",
+                    "update_id      varchar(45)   not null,",
+                    "update_date    timestamp     not null    default current_timestamp,",
+                    "constraint tb_login_account_history_pk primary key (user_id, login_id, to_ymdhms)",
+                    ");"
+                ]
+            },
+            {
+                "name": "tb_sys_setting",
+                "query": [
+                    "CREATE TABLE IF NOT EXISTS tb_sys_setting (",
+                    "sys_id         int8            not null,",
+                    "to_ymdhms      varchar(14)     not null,",
+                    "from_ymdhms    varchar(14)     not null,",
+                    "changed_reason varchar(3)      not null,",
+                    "name           varchar(128)    not null,",
+                    "alias          varchar(32)     null,",
+                    "value          varchar(128)    not null,",
+                    "remarks        varchar(256)    null,",
+                    "sort_order     varchar(8)      null,",
+                    "enabled        int4            not null    default 1,",
+                    "deleted        int4            not null    default 0,",
+                    "built_in       int4            not null    default 0,",
+                    "insert_id      varchar(45)     not null,",
+                    "insert_date    timestamp       not null    default current_timestamp,",
+                    "update_id      varchar(45)     not null,",
+                    "update_date    timestamp       not null    default current_timestamp,",
+                    "constraint tb_sys_setting_pk primary key (sys_id, to_ymdhms)",
+                    ");",
+                    "CREATE UNIQUE INDEX IF NOT EXISTS tb_sys_setting_idx1 ON tb_sys_setting using btree (name, to_ymdhms);"
+                ]
+            }
+        ],
+        "built_in": [
+            {
+                "name": "tb_code",
+                "query": [
+                    "insert into tb_code values",
+                    "('000', '000', '코드 그룹','code_group','000',1,0,1,'admin',current_timestamp,'admin',current_timestamp),",
+                    "('000', '010', 'ARC 구분','','010',1,0,1,'admin',current_timestamp,'admin',current_timestamp),",
+                    "('000', '020', '변경사유','','100',1,0,1,'admin',current_timestamp,'admin',current_timestamp),",
+                    "('020', '010', '생성','','',1,0,1,'admin',current_timestamp,'admin',current_timestamp),",
+                    "('020', '020', '변경','','',1,0,1,'admin',current_timestamp,'admin',current_timestamp),",
+                    "('020', '030', '삭제','','',1,0,1,'admin',current_timestamp,'admin',current_timestamp),",
+                    "('020', '040', '암호 변경','','',1,0,1,'admin',current_timestamp,'admin',current_timestamp);"
+                ]
+            },
+            {
+                "name": "tb_sys_setting",
+                "query": [
+                    "insert into tb_sys_setting values ",
+                    "(10001, '99991231235959', '20231010235959', '010', 'initPass', '', 'P@ssw0rd', '', '', 1, 0, 1, 'admin', current_timestamp, 'admin', current_timestamp);"
+                 
+                ]
+            }
+        ],
+        "comment": [
+            {
+                "name": "tb_code",
+                "query": [
+                    "comment on column tb_code.code_group is '코드 그룹';",
+                    "comment on column tb_code.code is '코드';",
+                    "comment on column tb_code.code_name is '코드 명칭';",
+                    "comment on column tb_code.remarks is '비고';",
+                    "comment on column tb_code.sort_order is '정렬 순서';",
+                    "comment on column tb_code.enabled is '활성화 구분';",
+                    "comment on column tb_code.deleted is '삭제 구분';",
+                    "comment on column tb_code.built_in is '시스템 설치 구분';",
+                    "comment on column tb_code.insert_id is '등록자 ID';",
+                    "comment on column tb_code.insert_date is '등록 일시';",
+                    "comment on column tb_code.update_id is '수정자 ID';",
+                    "comment on column tb_code.update_date is '수정 일시';"
+                ]
+            },
+            {
+                "name": "tb_user_group",
+                "query": [
+                    "comment on column tb_user_group.user_group_id is '유저 그룹 고유 id';",
+                    "comment on column tb_user_group.name is '유저 그룹 명';",
+                    "comment on column tb_user.remarks is '비고';",
+                    "comment on column tb_user_group.enabled is '활성화 구분';",
+                    "comment on column tb_user_group.deleted is '삭제 구분';",
+                    "comment on column tb_user_group.built_in is '시스템 설치 구분';",
+                    "comment on column tb_user_group.insert_id is '등록자 ID';",
+                    "comment on column tb_user_group.insert_date is '등록 일시';",
+                    "comment on column tb_user_group.update_id is '수정자 ID';",
+                    "comment on column tb_user_group.update_date is '수정 일시';"
+                ]
+            },
+            {
+                "name": "tb_user",
+                "query": [
+                    "comment on column tb_user.user_id is '사용자 id';",
+                    "comment on column tb_user.name is '이름';",
+                    "comment on column tb_user.cell is '모바일';",
+                    "comment on column tb_user.email is '이메일';",
+                    "comment on column tb_user.remarks is '비고';",
+                    "comment on column tb_user.enabled is '활성화 구분';",
+                    "comment on column tb_user.deleted is '삭제 구분';",
+                    "comment on column tb_user.built_in is '시스템 설치 구분';",
+                    "comment on column tb_user.insert_id is '등록자 ID';",
+                    "comment on column tb_user.insert_date is '등록 일시';",
+                    "comment on column tb_user.update_id is '수정자 ID';",
+                    "comment on column tb_user.update_date is '수정 일시';"
+                ]
+            },
+            {
+                "name": "tb_user_to_user_group",
+                "query": [
+                    "comment on column tb_user_to_user_group.user_id is '사용자 id';",
+                    "comment on column tb_user_to_user_group.user_group_id is '사용자 그룹 id';",
+                    "comment on column tb_user_to_user_group.insert_id is '등록자 ID';",
+                    "comment on column tb_user_to_user_group.insert_date is '등록 일시';",
+                    "comment on column tb_user_to_user_group.update_id is '수정자 ID';",
+                    "comment on column tb_user_to_user_group.update_date is '수정 일시';"
+                ]
+            },
+            {
+                "name": "tb_login_account",
+                "query": [
+                    "comment on column tb_login_account.user_id is '사용자 id';",
+                    "comment on column tb_login_account.login_id is '접속 계정';",
+                    "comment on column tb_login_account.password is '접속 비밀번호';",
+                    "comment on column tb_login_account.remarks is '비고';",
+                    "comment on column tb_login_account.enabled is '활성화 구분';",
+                    "comment on column tb_login_account.deleted is '삭제 구분';",
+                    "comment on column tb_login_account.built_in is '시스템 설치 구분';",
+                    "comment on column tb_login_account.insert_id is '등록자 ID';",
+                    "comment on column tb_login_account.insert_date is '등록 일시';",
+                    "comment on column tb_login_account.update_id is '수정자 ID';",
+                    "comment on column tb_login_account.update_date is '수정 일시';"
+                ]
+            },
+            {
+                "name": "tb_login_history",
+                "query": [
+                    "comment on column tb_login_history.user_id is '사용자 id';",
+                    "comment on column tb_login_history.login_id is '접속 계정';",
+                    "comment on column tb_login_history.create_time is '이력 생성 날짜';",
+                    "comment on column tb_login_history.code is '로그인/로그아웃 구분코드';",
+                    "comment on column tb_login_history.ip is '접속 ip 주소';",
+                    "comment on column tb_login_history.remarks is '비고';",
+                    "comment on column tb_login_history.enabled is '활성화 구분';",
+                    "comment on column tb_login_history.deleted is '삭제 구분';",
+                    "comment on column tb_login_history.built_in is '시스템 설치 구분';",
+                    "comment on column tb_login_history.insert_id is '등록자 ID';",
+                    "comment on column tb_login_history.insert_date is '등록 일시';",
+                    "comment on column tb_login_history.update_id is '수정자 ID';",
+                    "comment on column tb_login_history.update_date is '수정 일시';"
+                ]
+            },
+            {
+                "name": "tb_login_account_history",
+                "query": [
+                    "comment on column tb_login_account_history.user_id is '사용자 id';",
+                    "comment on column tb_login_account_history.login_id is '접속 계정';",
+                    "comment on column tb_login_account_history.to_ymdhms is '이력 종료일자';",
+                    "comment on column tb_login_account_history.from_ymdhms is '이력 시작일자';",
+                    "comment on column tb_login_account_history.changed_reason is '변경 사유';",
+                    "comment on column tb_login_account_history.password is '비밀번호';",
+                    "comment on column tb_login_account_history.remarks is '비고';",
+                    "comment on column tb_login_account_history.enabled is '활성화 구분';",
+                    "comment on column tb_login_account_history.deleted is '삭제 구분';",
+                    "comment on column tb_login_account_history.built_in is '시스템 설치 구분';",
+                    "comment on column tb_login_account_history.insert_id is '등록자 ID';",
+                    "comment on column tb_login_account_history.insert_date is '등록 일시';",
+                    "comment on column tb_login_account_history.update_id is '수정자 ID';",
+                    "comment on column tb_login_account_history.update_date is '수정 일시';"
+                ]
+            },
+            {
+                "name": "tb_sys_setting",
+                "query": [
+                    "comment on column tb_sys_setting.sys_id is '사용자 id';",
+                    "comment on column tb_sys_setting.to_ymdhms is '이력 종료일자';",
+                    "comment on column tb_sys_setting.from_ymdhms is '이력 시작일자';",
+                    "comment on column tb_sys_setting.changed_reason is '변경 사유';",
+                    "comment on column tb_sys_setting.name is '설정명';",
+                    "comment on column tb_sys_setting.alias is '별칭';",
+                    "comment on column tb_sys_setting.value is '설정값';",
+                    "comment on column tb_sys_setting.remarks is '비고';",
+                    "comment on column tb_sys_setting.enabled is '활성화 구분';",
+                    "comment on column tb_sys_setting.deleted is '삭제 구분';",
+                    "comment on column tb_sys_setting.built_in is '시스템 설치 구분';",
+                    "comment on column tb_sys_setting.insert_id is '등록자 ID';",
+                    "comment on column tb_sys_setting.insert_date is '등록 일시';",
+                    "comment on column tb_sys_setting.update_id is '수정자 ID';",
+                    "comment on column tb_sys_setting.update_date is '수정 일시';"
+                ]
+            }
+        ]
+    }
+}

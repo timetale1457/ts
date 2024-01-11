@@ -1,0 +1,15 @@
+{
+	"server": {
+		"port": 8100
+	},
+	"db": {
+		"host": "127.0.0.1",
+		"port": "5432",
+		"user": "mechive",
+		"pass": "p@ssw0rd",
+		"master_id": "postgres",
+		"master_pw": "password",
+		"db_name": "dalmuti",
+		"max_conn": 100
+	}
+}
