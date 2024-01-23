@@ -1,5 +1,5 @@
 import {Pool,PoolClient} from 'pg'
-import { Logger } from '../util/logger';
+import { Logger } from './logger';
 let logger = Logger.getInstance();
 export class NodePostgres {
     private static instance:NodePostgres = undefined;

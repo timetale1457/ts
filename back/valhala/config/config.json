@@ -1,15 +1,16 @@
 {
 	"server": {
-		"port": 8100
+		"port": 8100,
+		"secretKey":"01234567890123456789012345678901"
 	},
 	"db": {
 		"host": "127.0.0.1",
 		"port": "5432",
-		"user": "dalmuti",
+		"user": "valhala",
 		"pass": "p@ssw0rd",
 		"master_id": "postgres",
 		"master_pw": "password",
-		"db_name": "dalmuti",
+		"db_name": "valhala",
 		"max_conn": 100
 	}
 }

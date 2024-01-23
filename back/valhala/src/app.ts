@@ -2,11 +2,12 @@ import express from 'express';
 import * as http from 'http';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors';
-import { DalSocket } from './socket/socket';
 import { Logger } from './utils/logger';
 import { NodePostgres } from './utils/postgres';
 import path from 'path';
 import * as fs from 'fs';
+import { ValhalaCtrl } from './control';
+import { Encrypt } from './utils/encrypt';
 interface IDbInitGroup {
     create_table: IDbInitItem[],
     built_in: IDbInitItem[],
@@ -16,12 +17,11 @@ interface IDbInitItem {
     name: string,
     query: string[]
 }
-class Dalmuti {
+class Valhala {
     private logger: Logger = Logger.getInstance();
     private app: express.Express;
     private server: http.Server;
     private io: Server;
-    private sock: DalSocket;
     constructor() {
         this.app = express();
         this.server = http.createServer(this.app);
@@ -32,7 +32,6 @@ class Dalmuti {
               methods: ["GET", "POST"]
             }
         });
-        this.sock = new DalSocket();
     }
     private async initializeDb(config: object) {
         try {
@@ -128,12 +127,15 @@ class Dalmuti {
         }
     }
     public serverStart() {
+        this.initLogger();
+        this.logger.info('======================================================================');
         this.server.listen(4000, () => {
             console.log('Server is running on http://localhost:4000/');
         });
         let config = this.load_config();
+        Encrypt.setSecretKey(config['server']['secretKey']);
         this.initializeDb(config['db']);
-        this.sock.initialize(this.io);
+        ValhalaCtrl.getInstance();
     }
     private load_config():object{
         let config:any;
@@ -145,6 +147,11 @@ class Dalmuti {
         }
         return config;
     }
+    private initLogger() {
+        this.logger = Logger.getInstance();
+        let logPath = path.join(process.cwd(), './logs');
+        this.logger.init(logPath);
+    }
 }
 
-new Dalmuti().serverStart();
+new Valhala().serverStart();

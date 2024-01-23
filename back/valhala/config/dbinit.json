@@ -36,9 +36,9 @@
                 "query": [
                     "CREATE TABLE IF NOT EXISTS tb_user (",
                     "user_id          int8          not null,",
-                    "unique           varchar(256)  not null,",
+                    "unique_id        varchar(256)  not null,",
                     "name             varchar(256)  not null,",
-                    "cell             varchar(64)   null,",
+                    "tel              varchar(64)   null,",
                     "email            varchar(64)   null,",
                     "remarks          varchar(256)  null,",
                     "enabled          int4          not null    default 1,",
@@ -49,7 +49,8 @@
                     "update_id        varchar(45)   not null,",
                     "update_date      timestamp     not null    default current_timestamp,",
                     "constraint tb_user_pk primary key (user_id)",
-                    ");"
+                    ");",
+                    "CREATE UNIQUE INDEX IF NOT EXISTS tb_user_idx1 ON tb_user using btree (user_id, unique_id);"
                 ]
             },
             {
@@ -202,7 +203,7 @@
                 "query": [
                     "comment on column tb_user.user_id is '사용자 id';",
                     "comment on column tb_user.name is '이름';",
-                    "comment on column tb_user.cell is '모바일';",
+                    "comment on column tb_user.tel is '모바일';",
                     "comment on column tb_user.email is '이메일';",
                     "comment on column tb_user.remarks is '비고';",
                     "comment on column tb_user.enabled is '활성화 구분';",
